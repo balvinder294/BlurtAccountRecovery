@@ -1,4 +1,6 @@
-const client = new dhive.Client('https://api.hive.blog');
+const client = new dhive.Client('https://rpc.blurt.world');
+
+blurt.api.setOptions({ url: "https://rpc.blurt.world", useAppbaseApi: true })
 
 // Generates Aall Private Keys from username and password
 function getPrivateKeys(username, password, roles = ['owner', 'active', 'posting', 'memo']) {
@@ -24,6 +26,15 @@ function getPublicOwnerKey(username, password) {
 }
 
 // Checks if an account is eligible for recovery
+// async function checkEligibility(username) {
+//   // const [account] = await client.database.getAccounts([username]);
+//   const [account] = await blurt.api.getAccounts([username]);
+//   const now = new Date();
+//   const lastUpdate = new Date(`${account.last_owner_update}Z`);
+
+//   return ((now.getTime() - lastUpdate.getTime()) < (86400000 * 30));
+// }
+
 async function checkEligibility(username) {
   const [account] = await client.database.getAccounts([username]);
   const now = new Date();
@@ -105,15 +116,25 @@ $(document).ready(async function () {
             alert('Hive Keychain is not installed.');
           }
         } else {
-          client.broadcast.sendOperations([op], dhive.PrivateKey.from(activeKey))
-            .then((r) => {
-              console.log(r);
+          // client.broadcast.sendOperations([op], dhive.PrivateKey.from(activeKey))
+          //   .then((r) => {
+          //     console.log(r);
+          //     feedback.addClass('alert-success').html(`Account recovery request for <strong>${username}</strong> has been submitted successfully.`);
+          //   })
+          //   .catch(e => {
+          //     console.log(e);
+          //     feedback.addClass('alert-danger').text(e.message);
+          //   });
+          blurt.broadcast.send({ operations: [op], extensions: [] }, { owner: ownerKey.owner }, function (error, result) {
+            if (!error && result) {
+              console.log('result', result);
               feedback.addClass('alert-success').html(`Account recovery request for <strong>${username}</strong> has been submitted successfully.`);
-            })
-            .catch(e => {
-              console.log(e);
+
+            } else {
+              console.log(error);
               feedback.addClass('alert-danger').text(e.message);
-            });
+            }
+          });
         }
       } else {
         feedback.addClass('alert-warning');
@@ -155,16 +176,16 @@ $(document).ready(async function () {
 
         const accountUpdateObj = {
           account: username,
+          owner: newOwner.owner,
           active: dhive.Authority.from({ weight_threshold: account.active.weight_threshold, account_auths: account.active.account_auths, key_auths: [[newOwner.activePubkey, 1]] }),
           posting: dhive.Authority.from({ weight_threshold: account.posting.weight_threshold, account_auths: account.posting.account_auths, key_auths: [[newOwner.postingPubkey, 1]] }),
           memo_key: newOwner.memoPubkey,
           json_metadata: account.json_metadata,
         };
 
-        // Signing the operation with both old and new owner key
-        client.broadcast.sendOperations([op], [dhive.PrivateKey.from(oldOwner.owner), dhive.PrivateKey.from(newOwner.owner)])
-          .then(async (r) => {
-            console.log(r);
+        blurt.broadcast.send({ operations: [op], extensions: [] }, { owner: [oldOwner.owner, newOwner.owner] }, function (error, result) {
+          if (!error && result) {
+            console.log(result);
             feedback.addClass('alert-success').html(`<strong>${username}</strong> has been recovered successfully.</strong>`);
 
             // Updating account with the new posting and active key
@@ -175,11 +196,12 @@ $(document).ready(async function () {
               .catch(e => {
                 console.log(e);
               });
-          })
-          .catch(e => {
-            console.log(e);
+
+          } else {
+            console.log(error);
             feedback.addClass('alert-danger').text(e.message);
-          });
+          }
+        });
       } else {
         feedback.addClass('alert-warning').html(`Unable to find recovery request for <strong>${username}</strong> or the request has expired. Please start the procedure again.`);
       }
@@ -206,15 +228,15 @@ $(document).ready(async function () {
 
       const ownerKey = getPrivateKeys(username, password, ['owner']);
 
-      client.broadcast.sendOperations([op], dhive.PrivateKey.from(ownerKey.owner))
-        .then((r) => {
-          console.log(r);
+      blurt.broadcast.send({ operations: [op], extensions: [] }, { owner: ownerKey.owner }, function (error, result) {
+        if (!error && result) {
           feedback.addClass('alert-success').html(`Change account recovery request for <strong>${username}</strong> has been submitted successfully. It would take 30 days to take effect.`);
-        })
-        .catch(e => {
-          console.log(e);
-          feedback.addClass('alert-danger').text(e.message);
-        });
+
+        } else {
+          console.log(error);
+          feedback.addClass('alert-danger').text(error.message);
+        }
+      });
     }
   });
 });

@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="css/app.css">
-    <title>Hive Account Recovery - Change Recovery Account</title>
+    <title>Blurt Account Recovery - Change Recovery Account</title>
 </head>
 
 <body>
     <div class="container pt-3">
         <a href="./">
-            <h1 class="text-center">Hive Account Recovery</h1>
+            <h1 class="text-center">Blurt Account Recovery</h1>
         </a>
         <hr>
         <h2 class="text-center mb-5">Change Recovery Account</h2>
@@ -31,7 +31,7 @@
                         <label for="change-rec-atr">Account To Recover</label>
                         <input type="text" name="change-rec-atr" id="change-rec-atr" class="form-control"
                             autocomplete="no">
-                        <p class="form-text text-muted">Hive username of account you are trying to change recovery
+                        <p class="form-text text-muted">Blurt username of account you are trying to change recovery
                             account.</p>
                     </div>
 
@@ -39,7 +39,7 @@
                         <label for="change-rec-new">New Recovery Account</label>
                         <input type="text" name="change-rec-new" id="change-rec-new" class="form-control"
                             autocomplete="no">
-                        <p class="form-text text-muted">Hive username of the new recovery account. <span
+                        <p class="form-text text-muted">Blurt username of the new recovery account. <span
                                 class="text-info">Be careful this account can request account recovery.</span></p>
                     </div>
 
@@ -56,13 +56,17 @@
 
         <hr>
         <p class="text-center">
-            Brought to you by <a href="https://hive.blog/@reazuliqbal">@reazuliqbal</a>
+            Adapted for Blurt.blog by <a href="https://blurt.blog/@tekraze">@tekraze</a>. Vote for <a href="https://blurtwallet.com/~witnesses?highlight=tekraze">@tekraze as witness</a>.
+        </p>
+        <p class="text-center">
+            Forked from Original Hive Recovery tool by <a href="https://hive.blog/@reazuliqbal">@reazuliqbal</a>
         </p>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@hiveio/dhive@1.1.1/dist/dhive.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@blurtfoundation/blurtjs/dist/blurt.min.js"></script>
     <script src="js/app.js"></script>
 </body>
 
