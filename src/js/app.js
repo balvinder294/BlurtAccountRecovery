@@ -104,8 +104,8 @@ $(document).ready(async function () {
         }];
 
         if (activeKey === '') {
-          if (window.hive_keychain) {
-            window.hive_keychain.requestBroadcast(trustee, [op], 'active', function (response) {
+          if (window.blurt_keychain) {
+            window.blurt_keychain.requestBroadcast(trustee, [op], 'active', function (response) {
               if (response.success) {
                 feedbackDiv.addClass('alert-success').text(`Account recovery request for <strong>${username}</strong> has been submitted successfully.`);
               } else {
@@ -113,18 +113,9 @@ $(document).ready(async function () {
               }
             });
           } else {
-            alert('Hive Keychain is not installed.');
+            alert('Whalevault is not installed.');
           }
         } else {
-          // client.broadcast.sendOperations([op], dhive.PrivateKey.from(activeKey))
-          //   .then((r) => {
-          //     console.log(r);
-          //     feedback.addClass('alert-success').html(`Account recovery request for <strong>${username}</strong> has been submitted successfully.`);
-          //   })
-          //   .catch(e => {
-          //     console.log(e);
-          //     feedback.addClass('alert-danger').text(e.message);
-          //   });
           blurt.broadcast.send({ operations: [op], extensions: [] }, { owner: ownerKey.owner }, function (error, result) {
             if (!error && result) {
               console.log('result', result);
