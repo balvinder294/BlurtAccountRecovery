@@ -52,3 +52,7 @@ Feel free to fork the repository and submit your changes.
 ----
 
 Maintained by [@tekraze](https://blurt.blog/@tekraze). Vote for [@tekraze as Witness here](https://blurtwallet.com/~witnesses?highlight=tekraze)
+
+## Personal Blog
+
+Give a visit to [Tekraze](https://tekraze.com) for tech blog
